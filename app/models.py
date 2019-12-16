@@ -1,4 +1,5 @@
 from django.db import models
+from djrichtextfield.models import RichTextField
 
 
 class BaseModel(models.Model):
@@ -34,7 +35,7 @@ class Creature(BaseModel):
     Agility = models.CharField(default="", max_length=150)
     Endurance = models.CharField(default="", max_length=150)
     Durability = models.CharField(default="", max_length=150)
-    Other_Enchancements = models.CharField(default="", max_length=500)
-    Evolves_from = models.CharField(default="", max_length=500)
-    Evolves_to = models.CharField(default="", max_length=500)
-    Fluff = models.TextField(default="")
+    Other_Enchancements = RichTextField(default="", max_length=500)
+    Evolves_from = RichTextField(default="", max_length=500)
+    Evolves_to = RichTextField(default="", max_length=500)
+    Fluff = RichTextField(default="")

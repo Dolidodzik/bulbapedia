@@ -17,6 +17,11 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
+
     path('admin/', admin.site.urls),
-    path('', include("app.urls"))
+    path('', include("app.urls")),
+
+    # External libraries urls
+    path('djrichtextfield/', include('djrichtextfield.urls')),
+    
 ]
