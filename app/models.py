@@ -9,7 +9,8 @@ class BaseModel(models.Model):
         abstract = True
 
 class HomePage(BaseModel):
-    text = models.TextField(default="This text will be displayed on homepage of your site")
+    name = models.CharField(default="This will be displayed as header of your page, edit it in admin panel!", max_length=512)
+    text = models.TextField(default="This text will be displayed on homepage of your site, edit it in admin panel! I will also give you here some really interesting lorem ipsum text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean gravida, orci non ultrices aliquam, lectus urna lobortis dui, in scelerisque augue turpis et turpis. Cras viverra, lectus et sodales tincidunt, mi justo egestas mi, nec porta enim nisl nec tellus. Integer a urna et enim mollis fringilla non eget ipsum. Fusce libero urna, tempor non commodo posuere, aliquam ut erat. Duis accumsan dictum erat. Morbi ullamcorper sem non venenatis pellentesque. Mauris et semper ante. Nam lacinia pellentesque iaculis. In vel dui augue. Nulla maximus neque a gravida tempus. Proin sodales bibendum dui et lacinia. Mauris vestibulum scelerisque risus vitae malesuada. Duis id lobortis diam.")
 
     def save(self, *args, **kwargs):
         # Checking if user didn't try to add more than one HomePage, just for safety
