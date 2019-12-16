@@ -20,7 +20,7 @@ class HomePage(BaseModel):
         return super(HomePage, self).save(*args, **kwargs)
 
 class Creature(BaseModel):
-    Breed_name = models.CharField(default="", max_length=150)
+    Breed_name = models.CharField(default="", max_length=150, unique=True)
     Type = models.CharField(default="", max_length=150)
     Element = models.CharField(default="", max_length=150)
     Frequency = models.CharField(default="", max_length=150)
