@@ -1,10 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from app.models import *
 
 def homepage(request):
     # homepage_model_instance - hmi
     hmi = HomePage.objects.first()
     return render(request, "home.html", {"header": hmi.name, "text": hmi.text})
+
 
 def searchpage(request, search_query):
     data = [
