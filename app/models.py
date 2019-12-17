@@ -19,6 +19,9 @@ class HomePage(BaseModel):
             raise ValidationError('There is can be only one HomePage instance, do not add more than one instance of this, you can edit an existing one as you want!')
         return super(HomePage, self).save(*args, **kwargs)
 
+    def __str__(self):
+        return self.name
+
 class Creature(BaseModel):
     Breed_name = models.CharField(default="", max_length=150, unique=True)
     Type = models.CharField(default="", max_length=150)
@@ -39,3 +42,6 @@ class Creature(BaseModel):
     Evolves_from = RichTextField(default="")
     Evolves_to = RichTextField(default="")
     Fluff = RichTextField(default="")
+
+    def __str__(self):
+        return self.Breed_name
