@@ -47,7 +47,7 @@ class AdvancedSearch(View):
 
     def post(self, request):
         form = CreatureForm(request.POST)
-        data = []
+        data = dict()
 
         if form.is_valid():
             cd = form.cleaned_data
@@ -55,7 +55,9 @@ class AdvancedSearch(View):
                 user_input = cd.get(field.name)
                 if user_input:
                     field_name_icontains = field.name + '__icontains'
-                    data.append( Creature.objects.filter(**{field_name_icontains: user_input}) )
+                    qs = Creature.objects.filter(**{field_name_icontains: user_input})
+                    for row in qs:
+                        data[ str(row.id) ] = row
 
 
         return render(request, self.template_name, {"form": form, "data": data})
