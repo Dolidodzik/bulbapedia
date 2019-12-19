@@ -10,29 +10,20 @@ def homepage(request):
 
 
 def searchpage(request, search_query):
-    data = [
-        Creature.objects.filter(Breed_name__icontains=search_query),
-        Creature.objects.filter(Type__icontains=search_query),
-        Creature.objects.filter(Element__icontains=search_query),
-        Creature.objects.filter(Frequency__icontains=search_query),
-        Creature.objects.filter(Diet__icontains=search_query),
-        Creature.objects.filter(Role__icontains=search_query),
-        Creature.objects.filter(Endurance__icontains=search_query),
-        Creature.objects.filter(Hunger__icontains=search_query),
-        Creature.objects.filter(Strong_VS__icontains=search_query),
-        Creature.objects.filter(Weak_VS__icontains=search_query),
-        Creature.objects.filter(Attacks__icontains=search_query),
-        Creature.objects.filter(Strength__icontains=search_query),
-        Creature.objects.filter(Speed__icontains=search_query),
-        Creature.objects.filter(Agility__icontains=search_query),
-        Creature.objects.filter(Durability__icontains=search_query),
-        Creature.objects.filter(Other_Enchancements__icontains=search_query),
-        Creature.objects.filter(Evolves_from__icontains=search_query),
-        Creature.objects.filter(Evolves_to__icontains=search_query),
-        Creature.objects.filter(Fluff__icontains=search_query),
-    ]
 
-    return render(request, "search_results.html", {"search_query": search_query, "results": data })
+    results_dict = dict()
+    for field in Creature._meta.get_fields():
+        if search_query:
+            field_name_icontains = field.name + '__icontains'
+            qs = Creature.objects.filter(**{ field_name_icontains: search_query })
+            for row in qs:
+                results_dict[ row.id ] = row
+
+    results = []
+    for x in results_dict:
+        results.append( results_dict[x] )
+
+    return render(request, "search_results.html", {"search_query": search_query, "results": results })
 
 def subpage(request, creature_name):
     creature_data = Creature.objects.filter(Role__iexact=creature_name).first()
@@ -47,7 +38,7 @@ class AdvancedSearch(View):
 
     def post(self, request):
         form = CreatureForm(request.POST)
-        data = dict()
+        results_dict = dict()
 
         if form.is_valid():
             cd = form.cleaned_data
@@ -55,9 +46,11 @@ class AdvancedSearch(View):
                 user_input = cd.get(field.name)
                 if user_input:
                     field_name_icontains = field.name + '__icontains'
-                    qs = Creature.objects.filter(**{field_name_icontains: user_input})
+                    qs = Creature.objects.filter(**{ field_name_icontains: user_input })
                     for row in qs:
-                        data[ str(row.id) ] = row
+                        results_dict[ row.id ] = row
+        results = []
+        for x in results_dict:
+            results.append( results_dict[x] )
 
-
-        return render(request, self.template_name, {"form": form, "data": data})
+        return render(request, self.template_name, {"form": form, "results": results})

@@ -1,9 +1,8 @@
 <h1> Your search results, your search query was "{{search_query}}"! </h1>
 
-{% for queryset in results %}
-  {% for creature in queryset %}
-    <div>
-      <a href="/creature/{{ creature.Breed_name }}/"> {{ creature.Breed_name }} </a>
-    </div>
-  {% endfor %}
+
+{% for creature in results %}
+  <div style="font-size: 1.5rem;">
+    <a href="/creature/{{ creature.Breed_name }}/"> {{ creature.Breed_name }} </a>
+  </div>
 {% endfor %}
