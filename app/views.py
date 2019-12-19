@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from app.models import *
+from django.views import View
+from app.forms import CreatureForm
 
 def homepage(request):
     # homepage_model_instance - hmi
@@ -35,3 +37,25 @@ def searchpage(request, search_query):
 def subpage(request, creature_name):
     creature_data = Creature.objects.filter(Role__iexact=creature_name).first()
     return render(request, "subpage.html", {"creature_name": creature_name, "creature_data": creature_data} )
+
+class AdvancedSearch(View):
+    template_name = 'advanced_search.html'
+
+    def get(self, request):
+        form = CreatureForm()
+        return render(request, self.template_name, {"form": form})
+
+    def post(self, request):
+        form = CreatureForm(request.POST)
+        data = []
+
+        if form.is_valid():
+            cd = form.cleaned_data
+            for field in Creature._meta.get_fields():
+                user_input = cd.get(field.name)
+                if user_input:
+                    field_name_icontains = field.name + '__icontains'
+                    data.append( Creature.objects.filter(**{field_name_icontains: user_input}) )
+
+
+        return render(request, self.template_name, {"form": form, "data": data})

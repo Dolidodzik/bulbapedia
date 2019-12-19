@@ -1,0 +1,23 @@
+import django.forms as forms
+
+class CreatureForm(forms.Form):
+    #a = forms.CharField(max_length=20)
+    Breed_name = forms.CharField(max_length=100, required=False)
+    Type = forms.CharField(max_length=100, required=False)
+    Element = forms.CharField(max_length=100, required=False)
+    Frequency = forms.CharField(max_length=100, required=False)
+    Diet = forms.CharField(max_length=100, required=False)
+    Role = forms.CharField(max_length=100, required=False)
+    Hunger = forms.CharField(max_length=100, required=False)
+    Strong_VS = forms.CharField(max_length=100, required=False)
+    Weak_VS = forms.CharField(max_length=100, required=False)
+    Attacks = forms.CharField(max_length=100, required=False)
+    Strength = forms.CharField(max_length=100, required=False)
+    Speed = forms.CharField(max_length=100, required=False)
+    Agility = forms.CharField(max_length=100, required=False)
+    Endurance = forms.CharField(max_length=100, required=False)
+    Durability = forms.CharField(max_length=100, required=False)
+    Other_Enchancements = forms.CharField(max_length=250, required=False)
+    Evolves_from = forms.CharField(max_length=250, required=False)
+    Evolves_to = forms.CharField(max_length=250, required=False)
+    Fluff = forms.CharField(max_length=250, required=False)

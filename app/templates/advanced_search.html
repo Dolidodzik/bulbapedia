@@ -1,0 +1,8 @@
+<a href="/"> Back to home </a>
+
+<form action="/advanced_search/" method="POST">{% csrf_token %}
+    {{form.as_p}}
+    <button type="submit">Submit</button>
+</form>
+
+{{data}}

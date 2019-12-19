@@ -5,4 +5,5 @@ urlpatterns = [
     path('', homepage),
     path('search/<slug:search_query>/', searchpage),
     path('creature/<slug:creature_name>/', subpage),
+    path('advanced_search/', AdvancedSearch.as_view()),
 ]
