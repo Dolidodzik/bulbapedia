@@ -10,15 +10,17 @@ def homepage(request):
 
 
 def searchpage(request, search_query):
-
-    results_dict = dict()
-    for field in Creature._meta.get_fields():
-        if search_query:
+    if search_query:
+        # Using dict instead of list to avoid reapeting the same result
+        results_dict = dict()
+        for field in Creature._meta.get_fields():
+            # Getting results and assigning it to dict
             field_name_icontains = field.name + '__icontains'
             qs = Creature.objects.filter(**{ field_name_icontains: search_query })
             for row in qs:
                 results_dict[ row.id ] = row
 
+    # Converting dict to list
     results = []
     for x in results_dict:
         results.append( results_dict[x] )
@@ -38,6 +40,7 @@ class AdvancedSearch(View):
 
     def post(self, request):
         form = CreatureForm(request.POST)
+        # Using dict instead of list to avoid reapeting the same result
         results_dict = dict()
 
         if form.is_valid():
@@ -45,10 +48,12 @@ class AdvancedSearch(View):
             for field in Creature._meta.get_fields():
                 user_input = cd.get(field.name)
                 if user_input:
+                    # Getting results and assigning it to dict
                     field_name_icontains = field.name + '__icontains'
                     qs = Creature.objects.filter(**{ field_name_icontains: user_input })
                     for row in qs:
                         results_dict[ row.id ] = row
+        # Converting dict to list
         results = []
         for x in results_dict:
             results.append( results_dict[x] )

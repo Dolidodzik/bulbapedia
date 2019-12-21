@@ -122,8 +122,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 DJRICHTEXTFIELD_CONFIG = {
-    'js': ['//tinymce.cachefly.net/4.1/tinymce.min.js'],
-    'init_template': 'djrichtextfield/init/tinymce.js',
+    'js': ['//cdn.ckeditor.com/4.4.4/standard/ckeditor.js'],
+    'init_template': 'djrichtextfield/init/ckeditor.js',
     'settings': {
         'menubar': False,
         'plugins': 'link image',

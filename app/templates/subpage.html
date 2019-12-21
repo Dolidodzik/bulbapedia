@@ -1,6 +1,60 @@
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+
 <h1> Welcome to {{ creature_name }} </h1>
 
-Type: {{ creature_data.Type }}
-Element: {{ creature_data.Element }}
-Frequency: {{ creature_data.Frequency }} <br/>
-etc. other params are accesible aswell in the same way
+<div style="font-size: 1.4rem;">
+  Breed_name: {{ creature_data.Breed_name }} <br/>
+  Type: {{ creature_data.Type }} <br/>
+  Element: {{ creature_data.Element }} <br/>
+  Frequency: {{ creature_data.Frequency }}  <br/>
+  Diet: {{ creature_data.Diet }} <br/>
+  Role: {{ creature_data.Role }} <br/>
+  Hunger: {{ creature_data.Hunger }}  <br/>
+  Strong_VS: {{ creature_data.Strong_VS }} <br/>
+  Weak_VS: {{ creature_data.Weak_VS }} <br/>
+
+  <!-- <a> should be replaced with <div> later on, I used a for now only for purpose of <a> default styles -->
+  <a class = "ShowLessOrMoreButton" id="ShowMoreButton" onclick="ShowLessOrMore()" href="#"> Show More </a>
+  <br/><br/>
+  <div id="ReadMore" style="display: none">
+    Attacks: {{ creature_data.Attacks }}  <br/>
+    Strength: {{ creature_data.Strength }} <br/>
+    Speed: {{ creature_data.Speed }} <br/>
+    Frequency: {{ creature_data.Frequency }}  <br/>
+    Agility: {{ creature_data.Agility }} <br/>
+    Endurance: {{ creature_data.Endurance }} <br/>
+    Durability: {{ creature_data.Durability }}  <br/>
+
+    <div id="Other_Enchancements" class="RichText"></div>
+    <div id="Evolves_from" class="RichText"></div>
+    <div id="Evolves_to" class="RichText"></div>
+    <div id="Fluff" class="RichText"></div>
+
+    <!-- <a> should be replaced with <div> later on, I used a for now only for purpose of <a> default styles -->
+    <a class = "ShowLessOrMoreButton" id="ShowLessButton" onclick="ShowLessOrMore()" href="#"> Show Less </a>
+  </div>
+
+</div>
+
+
+<script>
+
+  // Maybe replaced with some loop, but I leave it now because it's only 4 lines
+  document.getElementById("Other_Enchancements").innerHTML = _.unescape("{{ creature_data.Other_Enchancements }}");
+  document.getElementById("Evolves_from").innerHTML = _.unescape("{{ creature_data.Evolves_from }}");
+  document.getElementById("Evolves_to").innerHTML = _.unescape("{{ creature_data.Evolves_to }}");
+  document.getElementById("Fluff").innerHTML = _.unescape("{{ creature_data.Fluff }}");
+
+  let is_more_content_shown = false;
+  function ShowLessOrMore(){
+    if(is_more_content_shown){
+      document.getElementById("ShowMoreButton").style.display = "block";
+      document.getElementById("ReadMore").style.display = "none";
+    }else{
+      document.getElementById("ShowMoreButton").style.display = "none";
+      document.getElementById("ReadMore").style.display = "block";
+    }
+    is_more_content_shown = !is_more_content_shown;
+  }
+
+</script>
