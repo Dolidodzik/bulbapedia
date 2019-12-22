@@ -12,9 +12,10 @@
   Hunger: {{ creature_data.Hunger }}  <br/>
   Strong_VS: {{ creature_data.Strong_VS }} <br/>
   Weak_VS: {{ creature_data.Weak_VS }} <br/>
-
-  <img src = "{{creature_data.icon.url}}">
-
+  
+  {% if creature_data.icon %}
+  	<img src = "{{creature_data.icon.url}}">
+  {% endif %}
   <!-- <a> should be replaced with <div> later on, I used a for now only for purpose of <a> default styles -->
   <a class = "ShowLessOrMoreButton" id="ShowMoreButton" onclick="ShowLessOrMore()" href="#"> Show More </a> <br/>
   <div id="ReadMore" style="display: none">

@@ -10,7 +10,7 @@ class BaseModel(models.Model):
         abstract = True
 
 class HomePage(BaseModel):
-    name = models.CharField(default="This will be displayed as header of your page, edit it in admin panel!", max_length=150)
+    header = models.CharField(default="This will be displayed as header of your page, edit it in admin panel!", max_length=150)
     text = models.TextField(default="This text will be displayed on homepage of your site, edit it in admin panel! I will also give you here some really interesting lorem ipsum text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean gravida, orci non ultrices aliquam, lectus urna lobortis dui, in scelerisque augue turpis et turpis. Cras viverra, lectus et sodales tincidunt, mi justo egestas mi, nec porta enim nisl nec tellus. Integer a urna et enim mollis fringilla non eget ipsum. Fusce libero urna, tempor non commodo posuere, aliquam ut erat. Duis accumsan dictum erat. Morbi ullamcorper sem non venenatis pellentesque. Mauris et semper ante. Nam lacinia pellentesque iaculis. In vel dui augue. Nulla maximus neque a gravida tempus. Proin sodales bibendum dui et lacinia. Mauris vestibulum scelerisque risus vitae malesuada. Duis id lobortis diam.")
 
     def save(self, *args, **kwargs):
@@ -20,7 +20,7 @@ class HomePage(BaseModel):
         return super(HomePage, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.name
+        return self.header
 
 class Creature(BaseModel):
     Breed_name = models.CharField(default="", max_length=150, unique=True)
@@ -39,10 +39,10 @@ class Creature(BaseModel):
     Agility = models.CharField(default="", max_length=150)
     Endurance = models.CharField(default="", max_length=150)
     Durability = models.CharField(default="", max_length=150)
-    Other_Enchancements = RichTextField(default="")
-    Evolves_from = RichTextField(default="")
-    Evolves_to = RichTextField(default="")
-    Fluff = RichTextField(default="")
+    Other_Enchancements = models.TextField(default="")
+    Evolves_from = models.TextField(default="")
+    Evolves_to = models.TextField(default="")
+    Fluff = models.TextField(default="")
 
     def __str__(self):
         return self.Breed_name

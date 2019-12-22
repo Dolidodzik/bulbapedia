@@ -6,7 +6,7 @@ from app.forms import CreatureForm
 def homepage(request):
     # homepage_model_instance - hmi
     hmi = HomePage.objects.first()
-    return render(request, "home.html", {"header": hmi.name, "text": hmi.text})
+    return render(request, "home.html", {"home": hmi})
 
 
 def searchpage(request, search_query):
@@ -28,7 +28,7 @@ def searchpage(request, search_query):
     return render(request, "search_results.html", {"search_query": search_query, "results": results })
 
 def subpage(request, creature_name):
-    creature_data = Creature.objects.filter(Role__iexact=creature_name).first()
+    creature_data = Creature.objects.filter(Breed_name=creature_name).first()
     return render(request, "subpage.html", {"creature_name": creature_name, "creature_data": creature_data} )
 
 class AdvancedSearch(View):
