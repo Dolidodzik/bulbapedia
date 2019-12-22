@@ -24,6 +24,7 @@ class HomePage(BaseModel):
 
 class Creature(BaseModel):
     Breed_name = models.CharField(default="", max_length=150, unique=True)
+    icon = models.ImageField(upload_to='creature_icons/', blank=True, null=True)
     Type = models.CharField(default="", max_length=150)
     Element = models.CharField(default="", max_length=150)
     Frequency = models.CharField(default="", max_length=150)

@@ -13,9 +13,10 @@
   Strong_VS: {{ creature_data.Strong_VS }} <br/>
   Weak_VS: {{ creature_data.Weak_VS }} <br/>
 
+  <img src = "{{creature_data.icon.url}}">
+
   <!-- <a> should be replaced with <div> later on, I used a for now only for purpose of <a> default styles -->
-  <a class = "ShowLessOrMoreButton" id="ShowMoreButton" onclick="ShowLessOrMore()" href="#"> Show More </a>
-  <br/><br/>
+  <a class = "ShowLessOrMoreButton" id="ShowMoreButton" onclick="ShowLessOrMore()" href="#"> Show More </a> <br/>
   <div id="ReadMore" style="display: none">
     Attacks: {{ creature_data.Attacks }}  <br/>
     Strength: {{ creature_data.Strength }} <br/>
@@ -39,7 +40,7 @@
 
 <script>
 
-  // Maybe replaced with some loop, but I leave it now because it's only 4 lines
+  // Encoding entities to HTML code, those lines maybe replaced with some loop, but I leave it now because it's only 4 lines
   document.getElementById("Other_Enchancements").innerHTML = _.unescape("{{ creature_data.Other_Enchancements }}");
   document.getElementById("Evolves_from").innerHTML = _.unescape("{{ creature_data.Evolves_from }}");
   document.getElementById("Evolves_to").innerHTML = _.unescape("{{ creature_data.Evolves_to }}");
