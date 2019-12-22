@@ -1,7 +1,6 @@
 from django.db import models
 from djrichtextfield.models import RichTextField
 
-
 class BaseModel(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
@@ -39,10 +38,10 @@ class Creature(BaseModel):
     Agility = models.CharField(default="", max_length=150)
     Endurance = models.CharField(default="", max_length=150)
     Durability = models.CharField(default="", max_length=150)
-    Other_Enchancements = models.TextField(default="")
-    Evolves_from = models.TextField(default="")
-    Evolves_to = models.TextField(default="")
-    Fluff = models.TextField(default="")
+    Other_Enchancements = models.TextField(default="<p></p>")
+    Evolves_from = models.TextField(default="<p></p>")
+    Evolves_to = models.TextField(default="<p></p>")
+    Fluff = models.TextField(default="<p></p>")
 
     def __str__(self):
         return self.Breed_name

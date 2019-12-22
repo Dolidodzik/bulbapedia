@@ -76,10 +76,12 @@ WSGI_APPLICATION = 'bulbapedia.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+'default': {
+    'ENGINE': 'django.db.backends.mysql',
+    'NAME': 'bulbapedia',
+    'USER': 'root',
+    'PASSWORD': 'DemoPass#00',
+  }
 }
 
 
@@ -120,11 +122,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
-
-# Path where media is stored
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-
 
 DJRICHTEXTFIELD_CONFIG = {
     'js': ['//cdn.ckeditor.com/4.4.4/standard/ckeditor.js'],
