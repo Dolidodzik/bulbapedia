@@ -3,10 +3,10 @@ from app.models import *
 from django.views import View
 from app.forms import CreatureForm
 
-def homepage(request):
-    # homepage_model_instance - hmi
-    hmi = HomePage.objects.first()
-    return render(request, "home.html", {"home": hmi})
+class HomePageView(View):
+    template_name = 'home.html'
+    def get(self, request):
+        return render(request, self.template_name, {"home": HomePage.objects.first(), "form": CreatureForm()})
 
 def searchpage(request, search_query):
     if search_query:
@@ -30,7 +30,7 @@ def subpage(request, creature_name):
     creature_data = Creature.objects.filter(Breed_name=creature_name).first()
     return render(request, "subpage.html", {"creature_name": creature_name, "creature_data": creature_data} )
 
-class AdvancedSearch(View):
+class AdvancedSearchView(View):
     template_name = 'advanced_search.html'
 
     def get(self, request):

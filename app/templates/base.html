@@ -3,11 +3,54 @@
     <head>
         <title>Bulbapedia</title>
         <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         {% block head %}
         {% endblock %}
     </head>
     <body>
-      {% block content %}
-      {% endblock %}
+
+      <div class="top-bar">
+        <form onsubmit="redirect()" action="javascript:void(0);">
+          <input id="search_query" type="text" placeholder="Search for some creature here!">
+          <input type="submit" value="Search!">
+        </form>
+        <a href="/"> Back to home </a> <br/><br/>
+        <button class="open-button" onclick="OpenForm()"> Advanced Search </button>
+
+        <form action="/" class="form-container" method="POST">{% csrf_token %}
+          {{form.as_p}}
+          <button type="submit">Submit</button> <br/>
+          <button type="button" onclick="CloseForm()"> Close </button> <br/>
+          <a href="/advanced_search"> Advanced Search - separate page </a>
+
+          {% if results %}
+            <div class="results">
+
+            </div>
+          {% endif %}
+        </form>
+
+      </div>
+
+      <div class="container">
+        {% block content %}
+        {% endblock %}
+      </div>
+
+      <script>
+        function redirect(){
+          window.open("/search/" + document.getElementById("search_query").value, '_blank');
+        }
+        function CloseForm(){
+          document.getElementsByClassName("form-container")[0].style.display = "none";
+        }
+        function OpenForm(){
+          if (document.getElementsByClassName("form-container")[0].style.display == "block"){
+            document.getElementsByClassName("form-container")[0].style.display = "none";
+          }else{
+            document.getElementsByClassName("form-container")[0].style.display = "block"
+          }
+        }
+      </script>
     </body>
 </html>
