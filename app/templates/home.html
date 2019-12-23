@@ -1,20 +1,24 @@
-<h1> {{ home.header }} </h1>
+{% extends 'base.html' %}
 
-<div class="text">
-  {{ home.text }}
-</div>
+{% block content %}
+  <h1> {{ home.header }} </h1>
 
-<form onsubmit="myFunction()" action="javascript:void(0);">
-  <input id="search_query" type="text" placeholder="Search for some creature here!">
-  <input type="submit" value="Search!">
-</form>
+  <div class="text">
+    {{ home.text }}
+  </div>
 
-<br/>
+  <form onsubmit="myFunction()" action="javascript:void(0);">
+    <input id="search_query" type="text" placeholder="Search for some creature here!">
+    <input type="submit" value="Search!">
+  </form>
 
-<a href="/advanced_search"> Advanced search </a>
+  <br/>
 
-<script>
-  function myFunction(){
-    window.location.href = "/search/" + document.getElementById("search_query").value;
-  }
-</script>
+  <a href="/advanced_search"> Advanced search </a>
+
+  <script>
+    function myFunction(){
+      window.location.href = "/search/" + document.getElementById("search_query").value;
+    }
+  </script>
+{% endblock %}

@@ -8,7 +8,6 @@ def homepage(request):
     hmi = HomePage.objects.first()
     return render(request, "home.html", {"home": hmi})
 
-
 def searchpage(request, search_query):
     if search_query:
         # Using dict instead of list to avoid reapeting the same result

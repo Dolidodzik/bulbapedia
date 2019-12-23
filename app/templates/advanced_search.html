@@ -1,3 +1,10 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+  <link rel="stylesheet" href="{% static 'css/advanced_search.css' %}">
+{% endblock %}
+
+{% block content %}
 <br/>
   <a href="/"> Back to home </a>
 <br/>
@@ -14,3 +21,4 @@
     </div>
   {% endfor %}
 </div>
+{% endblock %}

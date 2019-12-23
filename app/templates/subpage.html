@@ -1,62 +1,70 @@
-<script src = "https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+  <link rel="stylesheet" href="{% static 'css/search_results.css' %}">
+  <script src = "https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+{% endblock %}
 
-<h1> Welcome to {{ creature_name }} </h1>
 
-<div style="font-size: 1.4rem;">
-  Breed_name: {{ creature_data.Breed_name }} <br/>
-  Type: {{ creature_data.Type }} <br/>
-  Element: {{ creature_data.Element }} <br/>
-  Frequency: {{ creature_data.Frequency }}  <br/>
-  Diet: {{ creature_data.Diet }} <br/>
-  Role: {{ creature_data.Role }} <br/>
-  Hunger: {{ creature_data.Hunger }}  <br/>
-  Strong_VS: {{ creature_data.Strong_VS }} <br/>
-  Weak_VS: {{ creature_data.Weak_VS }} <br/>
-  
-  {% if creature_data.icon %}
-  	<img src = "{{creature_data.icon.url}}">
-  {% endif %}
-  <!-- <a> should be replaced with <div> later on, I used a for now only for purpose of <a> default styles -->
-  <a class = "ShowLessOrMoreButton" id="ShowMoreButton" onclick="ShowLessOrMore()" href="#"> Show More </a> <br/>
-  <div id="ReadMore" style="display: none">
-    Attacks: {{ creature_data.Attacks }}  <br/>
-    Strength: {{ creature_data.Strength }} <br/>
-    Speed: {{ creature_data.Speed }} <br/>
+{% block content %}
+  <h1> Welcome to {{ creature_name }} </h1>
+
+  <div style="font-size: 1.4rem;">
+    Breed_name: {{ creature_data.Breed_name }} <br/>
+    Type: {{ creature_data.Type }} <br/>
+    Element: {{ creature_data.Element }} <br/>
     Frequency: {{ creature_data.Frequency }}  <br/>
-    Agility: {{ creature_data.Agility }} <br/>
-    Endurance: {{ creature_data.Endurance }} <br/>
-    Durability: {{ creature_data.Durability }}  <br/>
+    Diet: {{ creature_data.Diet }} <br/>
+    Role: {{ creature_data.Role }} <br/>
+    Hunger: {{ creature_data.Hunger }}  <br/>
+    Strong_VS: {{ creature_data.Strong_VS }} <br/>
+    Weak_VS: {{ creature_data.Weak_VS }} <br/>
 
-    <div id="Other_Enchancements" class="RichText"></div>
-    <div id="Evolves_from" class="RichText"></div>
-    <div id="Evolves_to" class="RichText"></div>
-    <div id="Fluff" class="RichText"></div>
-
+    {% if creature_data.icon %}
+    	<img src = "{{creature_data.icon.url}}">
+    {% endif %}
     <!-- <a> should be replaced with <div> later on, I used a for now only for purpose of <a> default styles -->
-    <a class = "ShowLessOrMoreButton" id="ShowLessButton" onclick="ShowLessOrMore()" href="#"> Show Less </a>
+    <a class = "ShowLessOrMoreButton" id="ShowMoreButton" onclick="ShowLessOrMore()" href="#"> Show More </a> <br/>
+    <div id="ReadMore" style="display: none">
+      Attacks: {{ creature_data.Attacks }}  <br/>
+      Strength: {{ creature_data.Strength }} <br/>
+      Speed: {{ creature_data.Speed }} <br/>
+      Frequency: {{ creature_data.Frequency }}  <br/>
+      Agility: {{ creature_data.Agility }} <br/>
+      Endurance: {{ creature_data.Endurance }} <br/>
+      Durability: {{ creature_data.Durability }}  <br/>
+
+      <div id="Other_Enchancements" class="RichText"></div>
+      <div id="Evolves_from" class="RichText"></div>
+      <div id="Evolves_to" class="RichText"></div>
+      <div id="Fluff" class="RichText"></div>
+
+      <!-- <a> should be replaced with <div> later on, I used a for now only for purpose of <a> default styles -->
+      <a class = "ShowLessOrMoreButton" id="ShowLessButton" onclick="ShowLessOrMore()" href="#"> Show Less </a>
+    </div>
+
   </div>
 
-</div>
 
+  <script>
 
-<script>
+    // Encoding entities to HTML code, those lines maybe replaced with some loop, but I leave it now because it's only 4 lines
+    document.getElementById("Other_Enchancements").innerHTML = _.unescape("{{ creature_data.Other_Enchancements }}");
+    document.getElementById("Evolves_from").innerHTML = _.unescape("{{ creature_data.Evolves_from }}");
+    document.getElementById("Evolves_to").innerHTML = _.unescape("{{ creature_data.Evolves_to }}");
+    document.getElementById("Fluff").innerHTML = _.unescape("{{ creature_data.Fluff }}");
 
-  // Encoding entities to HTML code, those lines maybe replaced with some loop, but I leave it now because it's only 4 lines
-  document.getElementById("Other_Enchancements").innerHTML = _.unescape("{{ creature_data.Other_Enchancements }}");
-  document.getElementById("Evolves_from").innerHTML = _.unescape("{{ creature_data.Evolves_from }}");
-  document.getElementById("Evolves_to").innerHTML = _.unescape("{{ creature_data.Evolves_to }}");
-  document.getElementById("Fluff").innerHTML = _.unescape("{{ creature_data.Fluff }}");
-
-  let is_more_content_shown = false;
-  function ShowLessOrMore(){
-    if(is_more_content_shown){
-      document.getElementById("ShowMoreButton").style.display = "block";
-      document.getElementById("ReadMore").style.display = "none";
-    }else{
-      document.getElementById("ShowMoreButton").style.display = "none";
-      document.getElementById("ReadMore").style.display = "block";
+    let is_more_content_shown = false;
+    function ShowLessOrMore(){
+      if(is_more_content_shown){
+        document.getElementById("ShowMoreButton").style.display = "block";
+        document.getElementById("ReadMore").style.display = "none";
+      }else{
+        document.getElementById("ShowMoreButton").style.display = "none";
+        document.getElementById("ReadMore").style.display = "block";
+      }
+      is_more_content_shown = !is_more_content_shown;
     }
-    is_more_content_shown = !is_more_content_shown;
-  }
 
-</script>
+  </script>
+{% endblock %}
