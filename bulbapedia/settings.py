@@ -126,10 +126,9 @@ STATICFILES_DIRS = (
   os.path.join(BASE_DIR, 'static/'),
 )
 
-
 DJRICHTEXTFIELD_CONFIG = {
-    'js': ['//cdn.ckeditor.com/4.4.4/standard/ckeditor.js'],
-    'init_template': 'djrichtextfield/init/ckeditor.js',
+    'js': ['//tinymce.cachefly.net/4.1/tinymce.min.js'],
+    'init_template': 'djrichtextfield/init/tinymce.js',
     'settings': {
         'menubar': False,
         'plugins': 'link image',

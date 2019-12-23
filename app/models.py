@@ -38,10 +38,10 @@ class Creature(BaseModel):
     Agility = models.CharField(default="", max_length=150)
     Endurance = models.CharField(default="", max_length=150)
     Durability = models.CharField(default="", max_length=150)
-    Other_Enchancements = models.TextField(default="<p></p>")
-    Evolves_from = models.TextField(default="<p></p>")
-    Evolves_to = models.TextField(default="<p></p>")
-    Fluff = models.TextField(default="<p></p>")
+    Other_Enchancements = RichTextField(default="<p></p>")
+    Evolves_from = RichTextField(default="<p></p>")
+    Evolves_to = RichTextField(default="<p></p>")
+    Fluff = RichTextField(default="<p></p>")
 
     def __str__(self):
         return self.Breed_name
