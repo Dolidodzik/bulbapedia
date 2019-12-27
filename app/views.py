@@ -31,7 +31,7 @@ class HomePageView(View):
         results = []
         for x in results_dict:
             results.append( serializers.serialize('json', [results_dict[x]] ))
-
+            
         return JsonResponse({'results': results })
 
 

@@ -90,10 +90,9 @@
             },
             success: function (response) {
               if(response.results[0]){
-                let results = JSON.parse(response.results[0]);
                 let inner = '';
-                results.forEach(element => {
-                  console.log(element.fields.Breed_name);
+                response.results.forEach(element => {
+                  element = JSON.parse(element)[0];
                   inner += '<br/>  <a href="/creature/'+element.fields.Breed_name+'/" target="_blank"> '+element.fields.Breed_name+' </a>'
                 });
                 console.log(inner)
@@ -101,7 +100,6 @@
               }else{
                 document.getElementById("results").innerHTML = '<b style="color: white;">Nothing found! Try other search query!</b>'
               }
-
             },
             error: function(jqXHR, textStatus, errorThrown) {
                console.log(textStatus, errorThrown);
