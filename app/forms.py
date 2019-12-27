@@ -1,7 +1,6 @@
 import django.forms as forms
 
 class CreatureForm(forms.Form):
-    #a = forms.CharField(max_length=20)
     Breed_name = forms.CharField(max_length=100, required=False)
     Type = forms.CharField(max_length=100, required=False)
     Element = forms.CharField(max_length=100, required=False)

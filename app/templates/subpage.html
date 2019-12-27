@@ -5,10 +5,8 @@
   <script src = "https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
 {% endblock %}
 
-
 {% block content %}
   <h1> Welcome to {{ creature_name }} </h1>
-
   <div style="font-size: 1.4rem;">
     Breed_name: {{ creature_data.Breed_name }} <br/>
     Type: {{ creature_data.Type }} <br/>
@@ -42,13 +40,9 @@
       <!-- <a> should be replaced with <div> later on, I used a for now only for purpose of <a> default styles -->
       <a class = "ShowLessOrMoreButton" id="ShowLessButton" onclick="ShowLessOrMore()" href="#"> Show Less </a>
     </div>
-
   </div>
 
-
   <script>
-
-    // Encoding entities to HTML code, those lines maybe replaced with some loop, but I leave it now because it's only 4 lines
     document.getElementById("Other_Enchancements").innerHTML = _.unescape("{{ creature_data.Other_Enchancements }}");
     document.getElementById("Evolves_from").innerHTML = _.unescape("{{ creature_data.Evolves_from }}");
     document.getElementById("Evolves_to").innerHTML = _.unescape("{{ creature_data.Evolves_to }}");
@@ -65,6 +59,5 @@
       }
       is_more_content_shown = !is_more_content_shown;
     }
-
   </script>
 {% endblock %}

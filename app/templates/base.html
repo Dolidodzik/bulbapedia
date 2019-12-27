@@ -8,9 +8,8 @@
         {% endblock %}
     </head>
     <body>
-
       <div class="top-bar">
-
+        <!-- "Fake target" that will prevent form from redirecting, it will let javascript do the job -->
         <iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe"></iframe>
 
         <form id="simple_search_form" target="dummyframe">
@@ -18,12 +17,7 @@
           <input type="submit" value="Search!">
         </form>
 
-        <div>
-          <div id="s_results">
-          </div>
-          <div id="a_results">
-          </div>
-        </div>
+        <div id="s_results"></div>
 
         <a href="/"> Back to home </a> <br/><br/>
         <button class="open-button" onclick="OpenForm()"> Advanced Search </button>
@@ -34,6 +28,7 @@
           <button type="button" onclick="CloseForm()"> Close </button> <br/>
           <a href="/advanced_search"> Advanced Search - separate page </a>
 
+          <div id="a_results"></div>
         </form>
       </div>
 
