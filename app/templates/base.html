@@ -29,11 +29,10 @@
           <button type="submit">Submit</button> <br/>
           <button type="button" onclick="CloseForm()"> Close </button> <br/>
           <a href="/advanced_search"> Advanced Search - separate page </a>
+
+          <div id="a_results">
+          </div>
         </form>
-
-        <div id="a_results">
-        </div>
-
       </div>
 
       <div class="container">
@@ -85,7 +84,7 @@
                 let inner = '';
                 response.results.forEach(element => {
                   element = JSON.parse(element)[0];
-                  inner += '<br/> <a href="/creature/'+element.fields.Breed_name+'/" target="_blank"> '+element.fields.Breed_name+' </a>'
+                  inner += '<br/> <a href="/creature/'+element.fields.Breed_name+'" target="_blank"> '+element.fields.Breed_name+' </a>'
                 });
                 console.log(inner)
                 document.getElementById("s_results").innerHTML = inner
@@ -121,7 +120,7 @@
                 let inner = '';
                 response.results.forEach(element => {
                   element = JSON.parse(element)[0];
-                  inner += '<br/>  <a href="/creature/'+element.fields.Breed_name+'/" target="_blank"> '+element.fields.Breed_name+' </a>'
+                  inner += '<br/>  <a href="/creature/'+element.fields.Breed_name+'" target="_blank"> '+element.fields.Breed_name+' </a>'
                 });
                 console.log(inner)
                 document.getElementById("a_results").innerHTML = inner

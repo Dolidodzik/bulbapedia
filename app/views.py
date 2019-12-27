@@ -38,11 +38,12 @@ class HomePageView(View):
         # Converting dict to list
         for x in results_dict:
             results.append( serializers.serialize('json', [results_dict[x]] ))
-            
+
         return JsonResponse({'results': results })
 
 
 def subpage(request, creature_name):
+    print(creature_name)
     creature_data = Creature.objects.filter(Breed_name=creature_name).first()
     return render(request, "subpage.html", {"creature_name": creature_name, "creature_data": creature_data} )
 
