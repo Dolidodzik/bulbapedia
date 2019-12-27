@@ -10,14 +10,19 @@
     <body>
 
       <div class="top-bar">
-        <form onsubmit="redirect()" action="javascript:void(0);">
+
+        <iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe"></iframe>
+
+        <form id="simple_search_form" target="dummyframe">
           <input id="search_query" type="text" placeholder="Search for some creature here!">
           <input type="submit" value="Search!">
         </form>
+
+        <div id="s_results">
+        </div>
+
         <a href="/"> Back to home </a> <br/><br/>
         <button class="open-button" onclick="OpenForm()"> Advanced Search </button>
-
-        <iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe"></iframe>
 
         <form class="form-container" id="advanced_search_form" action="/" target="dummyframe">{% csrf_token %}
           {{form.as_p}}
@@ -26,7 +31,7 @@
           <a href="/advanced_search"> Advanced Search - separate page </a>
         </form>
 
-        <div id="results">
+        <div id="a_results">
         </div>
 
       </div>
@@ -37,9 +42,6 @@
       </div>
 
       <script>
-        function redirect(){
-          window.open("/search/" + document.getElementById("search_query").value, '_blank');
-        }
         function CloseForm(){
           document.getElementsByClassName("form-container")[0].style.display = "none";
         }
@@ -60,8 +62,8 @@
                  for (var i = 0; i < cookies.length; i++) {
                      var cookie = jQuery.trim(cookies[i]);
                      if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                         break;
+                       cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                       break;
                     }
                  }
              }
@@ -69,6 +71,32 @@
            }
            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
          }
+        });
+
+        $("#simple_search_form").submit(function(event){
+          $.ajax({
+            url: "http://localhost:8000",
+            method: "post",
+            data: {
+              search_query: event.target[0].value,
+            },
+            success: function (response) {
+              if(response.results[0]){
+                let inner = '';
+                response.results.forEach(element => {
+                  element = JSON.parse(element)[0];
+                  inner += '<br/> <a href="/creature/'+element.fields.Breed_name+'/" target="_blank"> '+element.fields.Breed_name+' </a>'
+                });
+                console.log(inner)
+                document.getElementById("s_results").innerHTML = inner
+              }else{
+                document.getElementById("s_results").innerHTML = '<b style="color: white;">Nothing found! Try other search query!</b>'
+              }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+               console.log(textStatus, errorThrown);
+            }
+          });
         });
 
         $("#advanced_search_form").submit(function(event){
@@ -86,7 +114,7 @@
             url: "http://localhost:8000",
             method: "post",
             data: {
-              formData: formData
+              formData: formData,
             },
             success: function (response) {
               if(response.results[0]){
@@ -96,9 +124,9 @@
                   inner += '<br/>  <a href="/creature/'+element.fields.Breed_name+'/" target="_blank"> '+element.fields.Breed_name+' </a>'
                 });
                 console.log(inner)
-                document.getElementById("results").innerHTML = inner
+                document.getElementById("a_results").innerHTML = inner
               }else{
-                document.getElementById("results").innerHTML = '<b style="color: white;">Nothing found! Try other search query!</b>'
+                document.getElementById("a_results").innerHTML = '<b style="color: white;">Nothing found! Try other search query!</b>'
               }
             },
             error: function(jqXHR, textStatus, errorThrown) {

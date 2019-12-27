@@ -12,46 +12,38 @@ class HomePageView(View):
         return render(request, self.template_name, {"home": HomePage.objects.first(), "form": CreatureForm()})
 
     def post(self, request):
-        inputs_list = request.POST.getlist('formData[]')
-
         # Using dict instead of list to avoid reapeting the same result
         results_dict = dict()
-
-        for i, field in enumerate(Creature._meta.get_fields()):
-            # Skip first 3 fields (id, created_date, modified_date)
-            if  i >= 3:
-                user_input = inputs_list[i-3]
-                if user_input:
-                    # Getting results and assigning it to dict
-                    field_name_icontains = field.name + '__icontains'
-                    qs = Creature.objects.filter(**{ field_name_icontains: user_input })
-                    for row in qs:
-                        results_dict[ row.id ] = row
-        # Converting dict to list
         results = []
-        for x in results_dict:
-            results.append( serializers.serialize('json', [results_dict[x]] ))
-            
+        if request.POST.get("search_query", None):
+            for field in Creature._meta.get_fields():
+                # Getting results and assigning it to dict
+                field_name_icontains = field.name + '__icontains'
+                qs = Creature.objects.filter(**{ field_name_icontains: request.POST.get("search_query", None) })
+                for row in qs:
+                    results_dict[ row.id ] = row
+            # Converting dict to list
+            for x in results_dict:
+                results.append( serializers.serialize('json', [results_dict[x]] ))
+
+        else:
+            inputs_list = request.POST.getlist('formData[]')
+            for i, field in enumerate(Creature._meta.get_fields()):
+                # Skip first 3 fields (id, created_date, modified_date)
+                if  i >= 3:
+                    user_input = inputs_list[i-3]
+                    if user_input:
+                        # Getting results and assigning it to dict
+                        field_name_icontains = field.name + '__icontains'
+                        qs = Creature.objects.filter(**{ field_name_icontains: user_input })
+                        for row in qs:
+                            results_dict[ row.id ] = row
+            # Converting dict to list
+            for x in results_dict:
+                results.append( serializers.serialize('json', [results_dict[x]] ))
+
         return JsonResponse({'results': results })
 
-
-def searchpage(request, search_query):
-    if search_query:
-        # Using dict instead of list to avoid reapeting the same result
-        results_dict = dict()
-        for field in Creature._meta.get_fields():
-            # Getting results and assigning it to dict
-            field_name_icontains = field.name + '__icontains'
-            qs = Creature.objects.filter(**{ field_name_icontains: search_query })
-            for row in qs:
-                results_dict[ row.id ] = row
-
-    # Converting dict to list
-    results = []
-    for x in results_dict:
-        results.append( results_dict[x] )
-
-    return render(request, "search_results.html", {"search_query": search_query, "results": results })
 
 def subpage(request, creature_name):
     creature_data = Creature.objects.filter(Breed_name=creature_name).first()

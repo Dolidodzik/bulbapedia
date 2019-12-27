@@ -24,3 +24,6 @@ body{
 #dummyframe{
   display: none;
 }
+#s_results{
+  margin-bottom: 10px;
+}
