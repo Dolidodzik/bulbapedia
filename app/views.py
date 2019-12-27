@@ -22,10 +22,6 @@ class HomePageView(View):
                 qs = Creature.objects.filter(**{ field_name_icontains: request.POST.get("search_query", None) })
                 for row in qs:
                     results_dict[ row.id ] = row
-            # Converting dict to list
-            for x in results_dict:
-                results.append( serializers.serialize('json', [results_dict[x]] ))
-
         else:
             inputs_list = request.POST.getlist('formData[]')
             for i, field in enumerate(Creature._meta.get_fields()):
@@ -38,10 +34,11 @@ class HomePageView(View):
                         qs = Creature.objects.filter(**{ field_name_icontains: user_input })
                         for row in qs:
                             results_dict[ row.id ] = row
-            # Converting dict to list
-            for x in results_dict:
-                results.append( serializers.serialize('json', [results_dict[x]] ))
 
+        # Converting dict to list
+        for x in results_dict:
+            results.append( serializers.serialize('json', [results_dict[x]] ))
+            
         return JsonResponse({'results': results })
 
 
