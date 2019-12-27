@@ -43,9 +43,8 @@ class HomePageView(View):
 
 
 def subpage(request, creature_name):
-    print(creature_name)
     creature_data = Creature.objects.filter(Breed_name=creature_name).first()
-    return render(request, "subpage.html", {"creature_name": creature_name, "creature_data": creature_data} )
+    return render(request, "subpage.html", {"creature_name": creature_name, "creature_data": creature_data, "form": CreatureForm()} )
 
 class AdvancedSearchView(View):
     template_name = 'advanced_search.html'
