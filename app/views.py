@@ -2,11 +2,38 @@ from django.shortcuts import render, redirect
 from app.models import *
 from django.views import View
 from app.forms import CreatureForm
+from django.http import JsonResponse
+from django.core import serializers
+
 
 class HomePageView(View):
     template_name = 'home.html'
     def get(self, request):
         return render(request, self.template_name, {"home": HomePage.objects.first(), "form": CreatureForm()})
+
+    def post(self, request):
+        inputs_list = request.POST.getlist('formData[]')
+
+        # Using dict instead of list to avoid reapeting the same result
+        results_dict = dict()
+
+        for i, field in enumerate(Creature._meta.get_fields()):
+            # Skip first 3 fields (id, created_date, modified_date)
+            if  i >= 3:
+                user_input = inputs_list[i-3]
+                if user_input:
+                    # Getting results and assigning it to dict
+                    field_name_icontains = field.name + '__icontains'
+                    qs = Creature.objects.filter(**{ field_name_icontains: user_input })
+                    for row in qs:
+                        results_dict[ row.id ] = row
+        # Converting dict to list
+        results = []
+        for x in results_dict:
+            results.append( serializers.serialize('json', [results_dict[x]] ))
+
+        return JsonResponse({'results': results })
+
 
 def searchpage(request, search_query):
     if search_query:

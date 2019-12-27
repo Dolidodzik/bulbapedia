@@ -17,7 +17,9 @@
         <a href="/"> Back to home </a> <br/><br/>
         <button class="open-button" onclick="OpenForm()"> Advanced Search </button>
 
-        <form action="/" class="form-container" method="POST">{% csrf_token %}
+        <iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe"></iframe>
+
+        <form class="form-container" id="advanced_search_form" action="/" target="dummyframe">{% csrf_token %}
           {{form.as_p}}
           <button type="submit">Submit</button> <br/>
           <button type="button" onclick="CloseForm()"> Close </button> <br/>
@@ -51,6 +53,55 @@
             document.getElementsByClassName("form-container")[0].style.display = "block"
           }
         }
+
+        $.ajaxSetup({
+          beforeSend: function(xhr, settings) {
+          function getCookie(name) {
+             var cookieValue = null;
+             if (document.cookie && document.cookie != '') {
+                 var cookies = document.cookie.split(';');
+                 for (var i = 0; i < cookies.length; i++) {
+                     var cookie = jQuery.trim(cookies[i]);
+                     if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                         break;
+                    }
+                 }
+             }
+             return cookieValue;
+           }
+           xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+         }
+        });
+
+        $("#advanced_search_form").submit(function(event){
+          /* Getting input values */
+          formData = []
+          /* i = 1, because [0] is hidden input, it shouldn't be used to search in databse */
+          for(let i=1; i < event.target.length; i++){
+            /* Ignore all elements, that aren't input[type="text"] */
+            if(event.target[i].type == "text"){
+              formData.push(event.target[i].value);
+            }
+          }
+
+          $.ajax({
+            url: "http://localhost:8000",
+            method: "post",
+            data: {
+              formData: formData
+            },
+            success: function (response) {
+              let results = JSON.parse(response.results[0]);
+              console.log(results.length)
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+               console.log(textStatus, errorThrown);
+            }
+          });
+
+          event.preventDefault();
+        });
       </script>
     </body>
 </html>
