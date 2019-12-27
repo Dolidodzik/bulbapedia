@@ -24,13 +24,10 @@
           <button type="submit">Submit</button> <br/>
           <button type="button" onclick="CloseForm()"> Close </button> <br/>
           <a href="/advanced_search"> Advanced Search - separate page </a>
-
-          {% if results %}
-            <div class="results">
-
-            </div>
-          {% endif %}
         </form>
+
+        <div id="results">
+        </div>
 
       </div>
 
@@ -92,8 +89,19 @@
               formData: formData
             },
             success: function (response) {
-              let results = JSON.parse(response.results[0]);
-              console.log(results.length)
+              if(response.results[0]){
+                let results = JSON.parse(response.results[0]);
+                let inner = '';
+                results.forEach(element => {
+                  console.log(element.fields.Breed_name);
+                  inner += '<br/>  <a href="/creature/'+element.fields.Breed_name+'/" target="_blank"> '+element.fields.Breed_name+' </a>'
+                });
+                console.log(inner)
+                document.getElementById("results").innerHTML = inner
+              }else{
+                document.getElementById("results").innerHTML = '<b style="color: white;">Nothing found! Try other search query!</b>'
+              }
+
             },
             error: function(jqXHR, textStatus, errorThrown) {
                console.log(textStatus, errorThrown);
