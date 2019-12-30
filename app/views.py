@@ -16,12 +16,16 @@ class HomePageView(View):
         results_dict = dict()
         results = []
         if request.POST.get("search_query", None):
-            for field in Creature._meta.get_fields():
-                # Getting results and assigning it to dict
-                field_name_icontains = field.name + '__icontains'
-                qs = Creature.objects.filter(**{ field_name_icontains: request.POST.get("search_query", None) })
-                for row in qs:
-                    results_dict[ row.id ] = row
+            search_query_parts = request.POST.get("search_query", None).split('&')
+            creature_filelds = Creature._meta.get_fields()
+
+            for search_query_part in search_query_parts:
+                for field in creature_filelds:
+                    # Getting results and assigning it to dict
+                    field_name_icontains = field.name + '__icontains'
+                    qs = Creature.objects.filter(**{ field_name_icontains: search_query_part.strip() })
+                    for row in qs:
+                        results_dict[ row.id ] = row
         else:
             inputs_list = request.POST.getlist('formData[]')
             for i, field in enumerate(Creature._meta.get_fields()):
