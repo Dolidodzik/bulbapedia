@@ -16,7 +16,7 @@ class HomePageView(View):
         results_dict = dict()
         results = []
         if request.POST.get("search_query", None):
-            search_query_parts = request.POST.get("search_query", None).split('&')
+            search_query_parts = request.POST.get("search_query", None).split('&&')
             creature_filelds = Creature._meta.get_fields()
 
             for search_query_part in search_query_parts:
