@@ -7,12 +7,15 @@ from django.core import serializers
 import json
 
 def search(request):
-    if request.GET.get("search_query", None) or request.GET.get("advanced_search_query", None):
+    search_query = request.GET.get("search_query", None)
+    advanced_search_query = request.GET.get("advanced_search_query", None)
+
+    if search_query or advanced_search_query:
         # Using dict instead of list to avoid reapeting the same result
         results_dict = dict()
         results = []
-        if request.GET.get("search_query", None):
-            search_query_parts = request.GET.get("search_query", None).split('AMPERSAND_MARK')
+        if search_query:
+            search_query_parts = search_query.split('AMPERSAND_MARK')
             creature_filelds = Creature._meta.get_fields()
 
             for search_query_part in search_query_parts:
@@ -22,8 +25,8 @@ def search(request):
                     qs = Creature.objects.filter(**{ field_name_icontains: search_query_part.strip() })
                     for row in qs:
                         results_dict[ row.id ] = row
-        elif request.GET.get("advanced_search_query", None):
-            inputs_string = request.GET.get("advanced_search_query", None)
+        elif advanced_search_query:
+            inputs_string = advanced_search_query
             inputs_list = list(inputs_string.split(","))
             for i, field in enumerate(Creature._meta.get_fields()):
                 # Skip first 3 fields (id, created_date, modified_date)
@@ -40,12 +43,14 @@ def search(request):
         for x in results_dict:
             results.append( serializers.serialize('json', [results_dict[x]] ))
 
+        # Last index of list will be that was user input previously
+        results.append(search_query)
         return results
 
 class HomePageView(View):
     template_name = 'home.html'
     def get(self, request):
-        return render(request, self.template_name, {"home": HomePage.objects.first(), "form": CreatureForm(), "search_results": json.dumps(search(request)) })
+        return render(request, self.template_name, {"home": HomePage.objects.first(), "form": CreatureForm(), "search": json.dumps(search(request)) })
 
 class AdvancedSearchView(View):
     template_name = 'advanced_search.html'

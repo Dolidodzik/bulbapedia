@@ -15,6 +15,10 @@ function ReplaceAmpersands(string){
   return_value = return_value.replace("&", "AMPERSAND_MARK")
   return return_value;
 }
+// Opposite of above ReplaceAmpersands()
+function ReplaceAMPERSAND_MARKS(string){
+  return string.replace("AMPERSAND_MARK", "&&");
+}
 
 $("#simple_search_form").submit(function(event){
   // I didn't use window.location.href +=, because if user press submit button more than 2 times it may throw a bugs. So I needed to rebulid full path without parameters
@@ -22,11 +26,11 @@ $("#simple_search_form").submit(function(event){
 });
 
 $("#advanced_search_form").submit(function(event){
-  /* Getting input values */
+  // Getting input values
   formData = []
-  /* i = 1, because [0] is hidden input, it shouldn't be used to search in databse */
+  // i = 1, because [0] is hidden input, it shouldn't be used to search in databse
   for(let i=1; i < event.target.length; i++){
-    /* Take only elements that are input[type="text"] */
+    // Take only elements that are input[type="text"] 
     if(event.target[i].type == "text"){
       formData.push( ReplaceAmpersands(event.target[i].value) );
     }
