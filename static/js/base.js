@@ -16,8 +16,8 @@ function ReplaceAmpersands(string){
   return return_value;
 }
 
-$("#simple_search_form").submit(function(event){ 
-  window.location.href = "http://localhost:8000?search_query="+ReplaceAmpersands(event.target[0].value);
+$("#simple_search_form").submit(function(event){
+  window.location.href += "?search_query="+ReplaceAmpersands(event.target[0].value);
 });
 
 $("#advanced_search_form").submit(function(event){
@@ -31,7 +31,7 @@ $("#advanced_search_form").submit(function(event){
     }
   }
 
-  window.location.href = "http://localhost:8000?advanced_search_query="+formData.toString();
+  window.location.href += "?advanced_search_query="+formData.toString();
 
   // Preventing form from refreses/redirects
   event.preventDefault();
