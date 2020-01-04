@@ -6,16 +6,21 @@ from django.http import JsonResponse
 from django.core import serializers
 import json
 
+def ReplaceReplaceAMPERSANDS_MARKS(string):
+    if string:
+        return string.replace("AMPERSAND_MARK", "&")
+    else:
+        return False
+
 def search(request):
-    search_query = request.GET.get("search_query", None)
+    search_query = ReplaceReplaceAMPERSANDS_MARKS(request.GET.get("search_query", None))
     advanced_search_query = request.GET.get("advanced_search_query", None)
-    print(search_query)
     if search_query or advanced_search_query:
         # Using dict instead of list to avoid reapeting the same result
         results_dict = dict()
         results = []
         if search_query:
-            search_query_parts = search_query.split('AMPERSAND_MARK')
+            search_query_parts = search_query.split('AMPERSANDS_MARKS')
             creature_filelds = Creature._meta.get_fields()
 
             for search_query_part in search_query_parts:
@@ -25,13 +30,16 @@ def search(request):
                     qs = Creature.objects.filter(**{ field_name_icontains: search_query_part.strip() })
                     for row in qs:
                         results_dict[ row.id ] = row
+
         elif advanced_search_query:
+            # If user submit an empty input, lets show him some message
+            search_query = "EMPTY_INPUT"
             inputs_string = advanced_search_query
             inputs_list = list(inputs_string.split(","))
             for i, field in enumerate(Creature._meta.get_fields()):
                 # Skip first 3 fields (id, created_date, modified_date)
                 if  i >= 3:
-                    user_input = inputs_list[i-3]
+                    user_input = ReplaceReplaceAMPERSANDS_MARKS(inputs_list[i-3])
                     if user_input:
                         # Getting results and assigning it to dict
                         field_name_icontains = field.name + '__icontains'
@@ -45,6 +53,7 @@ def search(request):
 
         # Last index of list will be that was user input previously
         results.append(search_query)
+        print(results)
         return results
 
 class HomePageView(View):
