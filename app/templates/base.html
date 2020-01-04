@@ -56,7 +56,6 @@
             let inner = '';
             search_results.forEach(element => {
               element = JSON.parse(element)[0];
-              console.log(element)
               inner += '<br/> <a href="/creature/'+element.fields.Breed_name+'"> '+element.fields.Breed_name+' </a>'
             });
             document.getElementById("s_results").innerHTML = inner

@@ -9,7 +9,7 @@ import json
 def search(request):
     search_query = request.GET.get("search_query", None)
     advanced_search_query = request.GET.get("advanced_search_query", None)
-
+    print(search_query)
     if search_query or advanced_search_query:
         # Using dict instead of list to avoid reapeting the same result
         results_dict = dict()
@@ -45,7 +45,6 @@ def search(request):
 
         # Last index of list will be that was user input previously
         results.append(search_query)
-        print(results)
         return results
 
 class HomePageView(View):
@@ -58,7 +57,7 @@ class AdvancedSearchView(View):
 
     def get(self, request):
         form = CreatureForm()
-        return render(request, self.template_name, {"form": form})
+        return render(request, self.template_name, {"form": form, "search": json.dumps(search(request))})
 
     def post(self, request):
         form = CreatureForm(request.POST)
@@ -76,8 +75,8 @@ class AdvancedSearchView(View):
         for x in results_dict:
             results.append( results_dict[x] )
 
-        return render(request, self.template_name, {"form": form, "results": results})
+        return render(request, self.template_name, {"form": form, "results": results, "search": json.dumps(search(request))})
 
 def subpage(request, creature_name):
     creature_data = Creature.objects.filter(Breed_name=creature_name).first()
-    return render(request, "subpage.html", {"creature_name": creature_name, "creature_data": creature_data, "form": CreatureForm(), "search_results": json.dumps(search(request)) })
+    return render(request, "subpage.html", {"creature_name": creature_name, "creature_data": creature_data, "form": CreatureForm(), "search": json.dumps(search(request)) })

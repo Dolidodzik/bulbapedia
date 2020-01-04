@@ -11,13 +11,14 @@ function OpenForm(){
 
 // Things function replaces every & or && in string with AMPERSAND_MARK
 function ReplaceAmpersands(string){
-  let return_value = string.replace("&&", "AMPERSAND_MARK");
-  return_value = return_value.replace("&", "AMPERSAND_MARK")
+  let return_value = string.replace(/&&/g, 'AMPERSAND_MARK');
+  return_value = return_value.replace(/&/g, 'AMPERSAND_MARK');
+  console.log(return_value)
   return return_value;
 }
 // Opposite of above ReplaceAmpersands()
 function ReplaceAMPERSAND_MARKS(string){
-  return string.replace("AMPERSAND_MARK", "&&");
+  return string.replace(/AMPERSAND_MARK/g, '&&');
 }
 
 $("#simple_search_form").submit(function(event){
@@ -30,7 +31,7 @@ $("#advanced_search_form").submit(function(event){
   formData = []
   // i = 1, because [0] is hidden input, it shouldn't be used to search in databse
   for(let i=1; i < event.target.length; i++){
-    // Take only elements that are input[type="text"] 
+    // Take only elements that are input[type="text"]
     if(event.target[i].type == "text"){
       formData.push( ReplaceAmpersands(event.target[i].value) );
     }
