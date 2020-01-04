@@ -11,16 +11,14 @@ function OpenForm(){
 
 // Things function replaces every & or && in string with AMPERSAND_MARK
 function ReplaceAmpersands(string){
-  let return_value = string.replace(/&&/g, 'AMPERSAND_MARKS');
+  let return_value = string.replace(/&&/g, 'AMPERSAND_MARK');
   return_value = return_value.replace(/&/g, 'AMPERSAND_MARK');
   console.log(return_value)
   return return_value;
 }
 // Opposite of above ReplaceAmpersands()
 function ReplaceAMPERSAND_MARKS(string){
-  s = string.replace(/AMPERSAND_MARKS/g, '&&');
-  s = s.replace(/AMPERSAND_MARK/g, '&');
-  return s;
+  return string.replace(/AMPERSAND_MARK/g, '&&');
 }
 
 $("#simple_search_form").submit(function(event){
