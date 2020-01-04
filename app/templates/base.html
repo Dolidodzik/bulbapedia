@@ -49,11 +49,14 @@
         if(search_results){
           if(search_results[0]){
             // Last element of array is previous search query, so lets take that and put into
-            $('#search_query').val( ReplaceAMPERSAND_MARKS(search_results[search_results.length-1]) );
+            if(typeof(search_results[search_results.length-1]) ==  "string"){
+              $('#search_query').val( ReplaceAMPERSAND_MARKS(search_results[search_results.length-1]) );
+            }
             search_results.pop()
             let inner = '';
             search_results.forEach(element => {
               element = JSON.parse(element)[0];
+              console.log(element)
               inner += '<br/> <a href="/creature/'+element.fields.Breed_name+'"> '+element.fields.Breed_name+' </a>'
             });
             document.getElementById("s_results").innerHTML = inner

@@ -40,11 +40,12 @@ def search(request):
                             results_dict[ row.id ] = row
 
         # Converting dict to list
-        for x in results_dict:
-            results.append( serializers.serialize('json', [results_dict[x]] ))
+        for result in results_dict:
+            results.append( serializers.serialize('json', [results_dict[result]] ))
 
         # Last index of list will be that was user input previously
         results.append(search_query)
+        print(results)
         return results
 
 class HomePageView(View):
