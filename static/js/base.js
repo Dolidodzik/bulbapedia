@@ -17,7 +17,8 @@ function ReplaceAmpersands(string){
 }
 
 $("#simple_search_form").submit(function(event){
-  window.location.href += "?search_query="+ReplaceAmpersands(event.target[0].value);
+  // I didn't use window.location.href +=, because if user press submit button more than 2 times it may throw a bugs. So I needed to rebulid full path without parameters
+  window.location.href = location.protocol + '//' + location.host + location.pathname + "?search_query="+ReplaceAmpersands(event.target[0].value);
 });
 
 $("#advanced_search_form").submit(function(event){
@@ -30,8 +31,8 @@ $("#advanced_search_form").submit(function(event){
       formData.push( ReplaceAmpersands(event.target[i].value) );
     }
   }
-
-  window.location.href += "?advanced_search_query="+formData.toString();
+  // I didn't use window.location.href +=, because if user press submit button more than 2 times it may throw a bugs. So I needed to rebulid full path without parameters
+  window.location.href = location.protocol + '//' + location.host + location.pathname + "?advanced_search_query="+formData.toString();
 
   // Preventing form from refreses/redirects
   event.preventDefault();
