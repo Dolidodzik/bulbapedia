@@ -6,8 +6,14 @@ from django.http import JsonResponse
 from django.core import serializers
 import json
 
+def ReplaceReplaceAMPERSAND_MARKS(string):
+    if string:
+        return string.replace("AMPERSAND_MARK", "&")
+    else:
+        return False
+
 def search(request):
-    search_query = request.GET.get("search_query", None)
+    search_query = ReplaceReplaceAMPERSAND_MARKS(request.GET.get("search_query", None))
     advanced_search_query = request.GET.get("advanced_search_query", None)
     print(search_query)
     if search_query or advanced_search_query:
@@ -15,7 +21,7 @@ def search(request):
         results_dict = dict()
         results = []
         if search_query:
-            search_query_parts = search_query.split('AMPERSAND_MARK')
+            search_query_parts = search_query.split('AMPERSAND_MARKS')
             creature_filelds = Creature._meta.get_fields()
 
             for search_query_part in search_query_parts:
