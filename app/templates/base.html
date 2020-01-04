@@ -47,7 +47,8 @@
 
         // In case GET had no params (user didn't submit simple or advanced form, so django search_results=false) he won't see "Nothing found" message
         if(search_results){
-          if(search_results[0]){
+          // If search query returned real, 0 results only defined field will be [0] (last element of array contains search query), so [1] will be empty only in case search query haven't got any results
+          if(search_results[1]){
             // Last element of array is previous search query, so lets take that and put into
             if(typeof(search_results[search_results.length-1]) ==  "string"){
               $('#search_query').val( ReplaceAMPERSAND_MARKS(search_results[search_results.length-1]) );
