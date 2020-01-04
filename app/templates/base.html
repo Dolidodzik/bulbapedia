@@ -38,6 +38,26 @@
       </div>
 
       <script src="{% static 'js/base.js' %}"></script>
+      <script>
 
+        // Below code is responsible for consuming "search_reults" passed in context of HomePageView
+
+        // escaping entities, getting needed data as list
+        let search_results = JSON.parse('{{ search_results | escapejs }}');
+
+        // In case GET had no params (user didn't submit simple or advanced form, so django search_results=false) he won't see "Nothing found" message
+        if(search_results){
+          if(search_results[0]){
+            let inner = '';
+            search_results.forEach(element => {
+              element = JSON.parse(element)[0];
+              inner += '<br/> <a href="/creature/'+element.fields.Breed_name+'"> '+element.fields.Breed_name+' </a>'
+            });
+            document.getElementById("s_results").innerHTML = inner
+          }else{
+            document.getElementById("s_results").innerHTML = '<b style="color: white;">Nothing found! Try other search query!</b>'
+          }
+        }
+      </script>
     </body>
 </html>

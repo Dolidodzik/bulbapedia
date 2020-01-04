@@ -9,50 +9,15 @@ function OpenForm(){
   }
 }
 
-$.ajaxSetup({
-  beforeSend: function(xhr, settings) {
-  function getCookie(name) {
-     var cookieValue = null;
-     if (document.cookie && document.cookie != '') {
-         var cookies = document.cookie.split(';');
-         for (var i = 0; i < cookies.length; i++) {
-             var cookie = jQuery.trim(cookies[i]);
-             if (cookie.substring(0, name.length + 1) == (name + '=')) {
-               cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-               break;
-            }
-         }
-     }
-     return cookieValue;
-   }
-   xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
- }
-});
+// Things function replaces every & or && in string with AMPERSAND_MARK
+function ReplaceAmpersands(string){
+  let return_value = string.replace("&&", "AMPERSAND_MARK");
+  return_value = return_value.replace("&", "AMPERSAND_MARK")
+  return return_value;
+}
 
-$("#simple_search_form").submit(function(event){
-  $.ajax({
-    url: "http://localhost:8000",
-    method: "post",
-    data: {
-      search_query: event.target[0].value,
-    },
-    success: function (response) {
-      if(response.results[0]){
-        let inner = '';
-        response.results.forEach(element => {
-          element = JSON.parse(element)[0];
-          inner += '<br/> <a href="/creature/'+element.fields.Breed_name+'" target="_blank"> '+element.fields.Breed_name+' </a>'
-        });
-        console.log(inner)
-        document.getElementById("s_results").innerHTML = inner
-      }else{
-        document.getElementById("s_results").innerHTML = '<b style="color: white;">Nothing found! Try other search query!</b>'
-      }
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-       console.log(textStatus, errorThrown);
-    }
-  });
+$("#simple_search_form").submit(function(event){ 
+  window.location.href = "http://localhost:8000?search_query="+ReplaceAmpersands(event.target[0].value);
 });
 
 $("#advanced_search_form").submit(function(event){
@@ -60,36 +25,14 @@ $("#advanced_search_form").submit(function(event){
   formData = []
   /* i = 1, because [0] is hidden input, it shouldn't be used to search in databse */
   for(let i=1; i < event.target.length; i++){
-    /* Ignore all elements, that aren't input[type="text"] */
+    /* Take only elements that are input[type="text"] */
     if(event.target[i].type == "text"){
-      formData.push(event.target[i].value);
+      formData.push( ReplaceAmpersands(event.target[i].value) );
     }
   }
 
-  $.ajax({
-    url: "http://localhost:8000",
-    method: "post",
-    data: {
-      formData: formData,
-    },
-    success: function (response) {
-      if(response.results[0]){
-        let inner = '';
-        response.results.forEach(element => {
-          element = JSON.parse(element)[0];
-          inner += '<br/>  <a href="/creature/'+element.fields.Breed_name+'" target="_blank"> '+element.fields.Breed_name+' </a>'
-        });
-        console.log(inner)
-        // using div with id = "s_results"
-        document.getElementById("s_results").innerHTML = inner
-      }else{
-        document.getElementById("s_results").innerHTML = '<b style="color: white;">Nothing found! Try other search query!</b>'
-      }
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-       console.log(textStatus, errorThrown);
-    }
-  });
+  window.location.href = "http://localhost:8000?advanced_search_query="+formData.toString();
 
+  // Preventing form from refreses/redirects
   event.preventDefault();
 });

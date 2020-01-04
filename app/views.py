@@ -4,46 +4,47 @@ from django.views import View
 from app.forms import CreatureForm
 from django.http import JsonResponse
 from django.core import serializers
-
+import json
 
 class HomePageView(View):
     template_name = 'home.html'
     def get(self, request):
-        return render(request, self.template_name, {"home": HomePage.objects.first(), "form": CreatureForm()})
+        if request.GET.get("search_query", None) or request.GET.get("advanced_search_query", None):
+            # Using dict instead of list to avoid reapeting the same result
+            results_dict = dict()
+            results = []
+            if request.GET.get("search_query", None):
+                search_query_parts = request.GET.get("search_query", None).split('AMPERSAND_MARK')
+                creature_filelds = Creature._meta.get_fields()
 
-    def post(self, request):
-        # Using dict instead of list to avoid reapeting the same result
-        results_dict = dict()
-        results = []
-        if request.POST.get("search_query", None):
-            search_query_parts = request.POST.get("search_query", None).split('&&')
-            creature_filelds = Creature._meta.get_fields()
-
-            for search_query_part in search_query_parts:
-                for field in creature_filelds:
-                    # Getting results and assigning it to dict
-                    field_name_icontains = field.name + '__icontains'
-                    qs = Creature.objects.filter(**{ field_name_icontains: search_query_part.strip() })
-                    for row in qs:
-                        results_dict[ row.id ] = row
-        else:
-            inputs_list = request.POST.getlist('formData[]')
-            for i, field in enumerate(Creature._meta.get_fields()):
-                # Skip first 3 fields (id, created_date, modified_date)
-                if  i >= 3:
-                    user_input = inputs_list[i-3]
-                    if user_input:
+                for search_query_part in search_query_parts:
+                    for field in creature_filelds:
                         # Getting results and assigning it to dict
                         field_name_icontains = field.name + '__icontains'
-                        qs = Creature.objects.filter(**{ field_name_icontains: user_input })
+                        qs = Creature.objects.filter(**{ field_name_icontains: search_query_part.strip() })
                         for row in qs:
                             results_dict[ row.id ] = row
+            elif request.GET.get("advanced_search_query", None):
+                inputs_sting = request.GET.get("advanced_search_query", None)
+                input_list = list(inputs_list.split(","))
+                for i, field in enumerate(Creature._meta.get_fields()):
+                    # Skip first 3 fields (id, created_date, modified_date)
+                    if  i >= 3:
+                        user_input = inputs_list[i-3]
+                        if user_input:
+                            # Getting results and assigning it to dict
+                            field_name_icontains = field.name + '__icontains'
+                            qs = Creature.objects.filter(**{ field_name_icontains: user_input })
+                            for row in qs:
+                                results_dict[ row.id ] = row
 
-        # Converting dict to list
-        for x in results_dict:
-            results.append( serializers.serialize('json', [results_dict[x]] ))
+            # Converting dict to list
+            for x in results_dict:
+                results.append( serializers.serialize('json', [results_dict[x]] ))
 
-        return JsonResponse({'results': results })
+            return render(request, self.template_name, {"home": HomePage.objects.first(), "form": CreatureForm(), "search_results": json.dumps(results)})
+        else:
+            return render(request, self.template_name, {"home": HomePage.objects.first(), "form": CreatureForm(), "search_results": "false"})
 
 class AdvancedSearchView(View):
     template_name = 'advanced_search.html'
