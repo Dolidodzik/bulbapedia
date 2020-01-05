@@ -13,7 +13,6 @@ function OpenForm(){
 function ReplaceAmpersands(string){
   let return_value = string.replace(/&&/g, 'AMPERSANDS_MARKS');
   return_value = return_value.replace(/&/g, 'AMPERSAND_MARK');
-  console.log(return_value)
   return return_value;
 }
 // Opposite of above ReplaceAmpersands()

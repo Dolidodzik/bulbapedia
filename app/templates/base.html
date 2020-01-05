@@ -47,14 +47,26 @@
 
         // In case GET had no params (user didn't submit simple or advanced form, so django search_results=false) he won't see "Nothing found" message
         if(search_results){
-          if(typeof(search_results[search_results.length-1]) ==  "string" && search_results[search_results.length-1] != "EMPTY_INPUT"){
-            $('#search_query').val( ReplaceAMPERSAND_MARKS(search_results[search_results.length-1]) );
+          // Displaying previous simple search query
+          if(search_results[search_results.length-2] != "EMPTY_INPUT"){
+            $('#search_query').val( ReplaceAMPERSAND_MARKS(search_results[search_results.length-2]) );
           }
-          // If search query returned real, 0 results only defined field will be [0] (last element of array contains search query), so [1] will be empty only in case search query haven't got any results
-          if( search_results[1] ){
-            // Last element of array is previous search query, so lets take that and put into
-            search_results.pop()
-            let inner = '';
+          // Displaying previous advanced search query
+          if(search_results[search_results.length-1] != "EMPTY_INPUT"){
+            let prev_adnaved_search_query = search_results[search_results.length-1].split(",")
+            let advanced_search_form = $("#advanced_search_form");
+            OpenForm();
+            for(let i = 1; i < advanced_search_form[0].length; i++){
+              if( advanced_search_form[0][i] && advanced_search_form[0][i].type=="text" && prev_adnaved_search_query[i-1]){
+                advanced_search_form[0][i].value = prev_adnaved_search_query[i-1];
+              }
+            }
+          }
+          // If search query returned real, 0 results only defined fields will be [0] and [1] (last elements of array contains search queries), so lenght 3 or more means that there were some results
+          if( search_results.length >= 3 ){
+            // Last elements of array are previous search queries, so lets delete that
+            search_results.pop(); search_results.pop();
+            let inner = "";
             search_results.forEach(element => {
               element = JSON.parse(element)[0];
               inner += '<br/> <a href="/creature/'+element.fields.Breed_name+'"> '+element.fields.Breed_name+' </a>'

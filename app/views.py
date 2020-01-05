@@ -20,6 +20,8 @@ def search(request):
         results_dict = dict()
         results = []
         if search_query:
+            # If user submit an empty input, let's show nothing
+            advanced_search_query = "EMPTY_INPUT"
             search_query_parts = search_query.split('AMPERSANDS_MARKS')
             creature_filelds = Creature._meta.get_fields()
 
@@ -32,7 +34,7 @@ def search(request):
                         results_dict[ row.id ] = row
 
         elif advanced_search_query:
-            # If user submit an empty input, lets show him some message
+            # If user submit an empty input, let's show nothing
             search_query = "EMPTY_INPUT"
             inputs_string = advanced_search_query
             inputs_list = list(inputs_string.split(","))
@@ -53,7 +55,7 @@ def search(request):
 
         # Last index of list will be that was user input previously
         results.append(search_query)
-        print(results)
+        results.append(advanced_search_query)
         return results
 
 class HomePageView(View):
