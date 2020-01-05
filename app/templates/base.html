@@ -47,18 +47,20 @@
 
         // In case GET had no params (user didn't submit simple or advanced form, so django search_results=false) he won't see "Nothing found" message
         if(search_results){
+
           // Displaying previous simple search query
           if(search_results[search_results.length-2] != "EMPTY_INPUT"){
             $('#search_query').val( ReplaceAMPERSAND_MARKS(search_results[search_results.length-2]) );
           }
           // Displaying previous advanced search query
           if(search_results[search_results.length-1] != "EMPTY_INPUT"){
+            console.log(search_results[search_results.length-1])
             let prev_adnaved_search_query = search_results[search_results.length-1].split(",")
             let advanced_search_form = $("#advanced_search_form");
             OpenForm();
             for(let i = 1; i < advanced_search_form[0].length; i++){
-              if( advanced_search_form[0][i] && advanced_search_form[0][i].type=="text" && prev_adnaved_search_query[i-1]){
-                advanced_search_form[0][i].value = prev_adnaved_search_query[i-1];
+              if( advanced_search_form[0][i] && advanced_search_form[0][i].type == "text" && prev_adnaved_search_query[i-1]){
+                advanced_search_form[0][i].value = ReplaceAMPERSAND_MARKS(prev_adnaved_search_query[i-1]);
               }
             }
           }

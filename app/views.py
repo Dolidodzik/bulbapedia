@@ -8,6 +8,7 @@ import json
 
 def ReplaceReplaceAMPERSANDS_MARKS(string):
     if string:
+        string = string.replace("AMPERSANDS_MARKS", "&&")
         return string.replace("AMPERSAND_MARK", "&")
     else:
         return False
@@ -22,9 +23,8 @@ def search(request):
         if search_query:
             # If user submit an empty input, let's show nothing
             advanced_search_query = "EMPTY_INPUT"
-            search_query_parts = search_query.split('AMPERSANDS_MARKS')
+            search_query_parts = search_query.split('&&')
             creature_filelds = Creature._meta.get_fields()
-
             for search_query_part in search_query_parts:
                 for field in creature_filelds:
                     # Getting results and assigning it to dict
@@ -42,12 +42,18 @@ def search(request):
                 # Skip first 3 fields (id, created_date, modified_date)
                 if  i >= 3:
                     user_input = ReplaceReplaceAMPERSANDS_MARKS(inputs_list[i-3])
+                    print(user_input)
                     if user_input:
-                        # Getting results and assigning it to dict
-                        field_name_icontains = field.name + '__icontains'
-                        qs = Creature.objects.filter(**{ field_name_icontains: user_input })
-                        for row in qs:
-                            results_dict[ row.id ] = row
+                        search_query_parts = user_input.split('&&')
+                        creature_filelds = Creature._meta.get_fields()
+                        for search_query_part in search_query_parts:
+                            for field in creature_filelds:
+                                # Getting results and assigning it to dict
+                                field_name_icontains = field.name + '__icontains'
+                                qs = Creature.objects.filter(**{ field_name_icontains: search_query_part.strip() })
+                                for row in qs:
+                                    results_dict[ row.id ] = row
+
 
         # Converting dict to list
         for result in results_dict:
